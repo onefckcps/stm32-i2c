@@ -2,7 +2,14 @@
 
 #define VCNL4200_ADDRESS 0x51 // I2C address for VCNL4200
 
-uint16_t readALSData();
+void enableALS()
+{
+  Wire.beginTransmission(VCNL4200_ADDRESS);
+  Wire.write(0x00);       // Specifies which register 2 write to (in this case: ALS_CONF = 0x00; defaults to 01 => ALS disabled by defautl)
+  Wire.write(0x00);       // Write 0x00 to register address 0x00 => turning ALS on
+  Wire.write(0x00);       // Write 0x00 to register address 0x00 => turning ALS on
+  Wire.endTransmission(); // leaving () blank or (true) will send a stop condition => allowing other masters to access to device again <=> repeated start condition: often theres the need to first write an address and after that immediately reading bytes from it. => s
+}
 
 uint16_t readALSData()
 {
@@ -17,25 +24,12 @@ uint16_t readALSData()
   Wire.write(0x09);            // ALS Data Low Byte Register Address
   Wire.endTransmission(false); // End Transmission, but don't release the bus (Repeated Start)
 
-  // Request 1 byte of data
-  Wire.requestFrom(VCNL4200_ADDRESS, 1);
-  // Read the low byte
-  if (Wire.available() == 1)
+  Wire.requestFrom(VCNL4200_ADDRESS, 2);
+
+  // Read the low & high byte
+  if (Wire.available())
   {
     alsDataLow = Wire.read();
-  }
-
-  // Start I2C Transmission
-  Wire.beginTransmission(VCNL4200_ADDRESS);
-  // Send ALS Data High Byte Command
-  Wire.write(0x0A);            // ALS Data High Byte Register Address
-  Wire.endTransmission(false); // End Transmission, but don't release the bus (Repeated Start)
-
-  // Request 1 byte of data
-  Wire.requestFrom(VCNL4200_ADDRESS, 1);
-  // Read the high byte
-  if (Wire.available() == 1)
-  {
     alsDataHigh = Wire.read();
   }
 
@@ -47,7 +41,8 @@ uint16_t readALSData()
 
 void setup()
 {
-  Wire.begin();       // Initialize I2C
+  Wire.begin(); // Initialize I2C
+  enableALS();
   Serial.begin(9600); // Start serial communication for debugging#
 }
 
