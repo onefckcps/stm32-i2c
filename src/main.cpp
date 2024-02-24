@@ -1,9 +1,10 @@
 #include <Wire.h>
 
 #define VCNL4200_ADDRESS 0x51 // I2C address for VCNL4200
+#define PS_SD_turniton 1 << 2
 
 constexpr int PS_SD = {0};
-constexpr int PS_IT = {3, 2, 1};
+// constexpr int PS_IT = {3, 2, 1};
 
 void enablePS()
 {
