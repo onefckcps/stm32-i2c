@@ -2,6 +2,26 @@
 
 #define VCNL4200_ADDRESS 0x51 // I2C address for VCNL4200
 
+constexpr int PS_SD = {0};
+constexpr int PS_IT = {3, 2, 1};
+
+void enablePS()
+{
+  // Write to PS_CONF 1 & PS_CONF 2 Registers
+  Wire.beginTransmission(VCNL4200_ADDRESS);
+  Wire.write(0x03);
+  Wire.write(0x00);   // enables PS functionality
+  Wire.write(0b1000); // enables 16bit for PS_OUTPUT
+  Wire.endTransmission(false);
+
+  // Write to PS_MS Register
+  Wire.beginTransmission(VCNL4200_ADDRESS);
+  Wire.write(0x04);
+  Wire.write(0x00);
+  Wire.write(0b10000); // in theory: should enable proximity normal operation mode
+  Wire.endTransmission();
+}
+
 void enableALS()
 {
   Wire.beginTransmission(VCNL4200_ADDRESS);
@@ -39,17 +59,49 @@ uint16_t readALSData()
   return alsData;
 }
 
+uint16_t readPSData()
+{
+  // Declare the function readALSData
+
+  uint8_t psDataLow, psDataHigh;
+  uint16_t psData;
+
+  // Start I2C Transmission
+  Wire.beginTransmission(VCNL4200_ADDRESS);
+  // Send ALS Data Low Byte Command
+  Wire.write(0x08);            // ALS Data Low Byte Register Address
+  Wire.endTransmission(false); // End Transmission, but don't release the bus (Repeated Start)
+
+  Wire.requestFrom(VCNL4200_ADDRESS, 2);
+
+  // Read the low & high byte
+  if (Wire.available())
+  {
+    psDataLow = Wire.read();
+    psDataHigh = Wire.read();
+  }
+
+  // Combine the two bytes
+  psData = (psDataHigh << 8) | psDataLow;
+
+  return psData;
+}
+
 void setup()
 {
   Wire.begin(); // Initialize I2C
   enableALS();
+  enablePS();
   Serial.begin(9600); // Start serial communication for debugging#
 }
 
 void loop()
 {
   uint16_t alsData = readALSData();
+  uint16_t psData = readPSData();
   Serial.print("ALS Data: ");
   Serial.println(alsData);
+  Serial.print("PS Data: ");
+  Serial.println(psData);
   delay(1000); // Wait for 1 second before reading again
 }
