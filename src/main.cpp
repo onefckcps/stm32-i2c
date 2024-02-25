@@ -1,4 +1,20 @@
 #include <Wire.h>
+#include <bitset>
+
+// 1 2 4 8 16 32 64 128 256
+
+// Lets define bitmasks:
+#define ALS_TURN_ON (0 << 0)
+#define ALS_100MS_INTEGRATION_TIME (1 << 6)
+#define ALS_200MS_INTEGRATION_TIME (1 << 7)
+// #define ALS_400MS_INTEGRATION_TIME (ALS_100MS_INTEGRATION_TIME | ALS_200MS_INTEGRATION_TIME) // 00000011 => 11000000
+#define ALS_400MS_INTEGRATION_TIME (11 << 6) // 00000011 => 11000000
+
+// Using Bitsets:;
+// std::bitset<8> ALS_TURN_ON(0 << 0);
+// std::bitset<8> ALS_100MS_INTEGRATION_TIME{1 << 6};
+// std::bitset<8> ALS_200MS_INTEGRATION_TIME{1 << 7};
+// std::bitset<8> ALS_400MS_INTEGRATION_TIME{11 << 6};
 
 #define VCNL4200_ADDRESS 0x51 // I2C address for VCNL4200
 #define PS_SD_turniton 1 << 2
@@ -30,6 +46,16 @@ void enableALS()
   Wire.write(0x00);       // Write 0x00 to register address 0x00 => turning ALS on
   Wire.write(0x00);       // Write 0x00 to register address 0x00 => turning ALS on
   Wire.endTransmission(); // leaving () blank or (true) will send a stop condition => allowing other masters to access to device again <=> repeated start condition: often theres the need to first write an address and after that immediately reading bytes from it. => s
+}
+
+// But with bitmanipulation / bitmasks
+void enableALS2()
+{
+  Wire.beginTransmission(VCNL4200_ADDRESS);
+  Wire.write(0x00);
+  Wire.write(ALS_TURN_ON | ALS_400MS_INTEGRATION_TIME);
+  Wire.write(0x00);
+  Wire.endTransmission();
 }
 
 uint16_t readALSData()
@@ -91,18 +117,20 @@ uint16_t readPSData()
 void setup()
 {
   Wire.begin(); // Initialize I2C
-  enableALS();
+  // enableALS();
+  enableALS2();
   enablePS();
   Serial.begin(9600); // Start serial communication for debugging#
 }
 
 void loop()
 {
+  // Serial.print((ALS_TURN_ON).to_ulong());
   uint16_t alsData = readALSData();
   uint16_t psData = readPSData();
   Serial.print("ALS Data: ");
   Serial.println(alsData);
   Serial.print("PS Data: ");
   Serial.println(psData);
-  delay(1000); // Wait for 1 second before reading again
+  delay(200); // Wait for 1 second before reading again
 }
