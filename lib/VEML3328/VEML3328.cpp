@@ -1,6 +1,14 @@
-#include "veml3328.h"
+#include "VEML3328.h"
 
-void veml3328_enableSensor() // sets register SD0 & SD1 to 0 => enabled
+VEML3328::VEML3328()
+{
+    // Wire.begin();
+    // Serial.begin(9600);
+    enableSensor();
+    Serial.println("VEML3328 object created");
+}
+
+void VEML3328::enableSensor() // sets register SD0 & SD1 to 0 => enabled
 {
     Wire.beginTransmission(VEML3328_ADDRESS);
     Wire.write(0x00); // address for command code register
@@ -9,7 +17,7 @@ void veml3328_enableSensor() // sets register SD0 & SD1 to 0 => enabled
     Wire.endTransmission();
 }
 
-uint16_t readBlue()
+uint16_t VEML3328::readBlue()
 {
     uint8_t lowData, highData;
     uint16_t data;
@@ -33,7 +41,7 @@ uint16_t readBlue()
     return data;
 }
 
-uint16_t readGreen()
+uint16_t VEML3328::readGreen()
 {
     uint8_t lowData, highData;
     uint16_t data;
@@ -57,7 +65,7 @@ uint16_t readGreen()
     return data;
 }
 
-uint16_t readRed()
+uint16_t VEML3328::readRed()
 {
     uint8_t lowData, highData;
     uint16_t data;

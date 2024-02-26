@@ -21,4 +21,4 @@
 ## DONT FORGET
 
 - Spektrum der Bannane im IR-Bereich auch anschauen!
-- White LED von Sensor abschranken (3D-Druck??)
+- White LED von Sensor abschranken (3D-Druck??) ![3D Print](assets/white_led_3dprint.jpg)
