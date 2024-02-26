@@ -1,6 +1,6 @@
 #include "veml3328.h"
 
-void enableSensor() // sets register SD0 & SD1 to 0 => enabled
+void veml3328_enableSensor() // sets register SD0 & SD1 to 0 => enabled
 {
     Wire.beginTransmission(VEML3328_ADDRESS);
     Wire.write(0x00); // address for command code register

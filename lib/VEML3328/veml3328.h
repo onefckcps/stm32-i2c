@@ -6,7 +6,7 @@
 #include <Wire.h>
 
 // Lets define functions
-void enableSensor(); // sets register SD0 & SD1 to 0 => enabled#
+void veml3328_enableSensor(); // sets register SD0 & SD1 to 0 => enabled
 uint16_t readBlue();
 uint16_t readGreen();
 uint16_t readRed();
