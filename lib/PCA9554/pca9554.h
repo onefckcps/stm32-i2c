@@ -9,7 +9,8 @@
 #define P6_OUTPUT (1 << 6)         // control WHITE LED
 
 // functions declarations
-uint8_t getConfig(int addr);
+uint8_t getConfig(int configAddr, int i2cAddress, int bytesToRead);
+
 void setConfig(int addr, int config);
 
 #endif
