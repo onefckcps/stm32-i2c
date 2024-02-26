@@ -3,17 +3,18 @@
 #include "PCA9954.h"
 
 PCA9554 *pca;       // Pointer to PCA9954 object (I2C expander)
-VEML3328 *veml3328; // Pointer to VEML3328 object (I2C light sensor); You can reference the object using the pointer (->) operator
+VEML3328 *veml3328; // Pointer to VEML3328 object (I2C light sensor); We can reference the object using the pointer (->) operator
 
 void setup()
 {
   Serial.begin(9600); // Start serial communication for debugging
   Wire.begin();       // Initialize I2C
 
+  // Create Libary objects
   pca = new PCA9554();
   veml3328 = new VEML3328();
 
-  // Lets turn on the white LED
+  // Lets turn the white LED on
   pca->led_white_on(*pca);
   // delay(2000);
   // pca->led_white_off(*pca);

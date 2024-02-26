@@ -14,11 +14,13 @@
 
 class VEML3328 final
 {
+private:
+    void enableSensor(); // sets register SD0 & SD1 to 0 => enabled
+    uint8_t readRGB(int commandCode);
 
 public:
-    VEML3328();
+    VEML3328(); // Constructor
     // Lets define functions
-    void enableSensor();  // sets register SD0 & SD1 to 0 => enabled
     uint16_t readBlue();  // raw count number of blue light
     uint16_t readGreen(); // raw count number of green light
     uint16_t readRed();   // raw count number of red light => convert to lux
