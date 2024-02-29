@@ -1,0 +1,5 @@
+dependencies:
+  idf:
+    version: ">=5.0.1"
+  i2cdev:
+    path: ../i2cdev/
