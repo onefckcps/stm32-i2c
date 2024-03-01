@@ -49,6 +49,21 @@ void PCA9554::led_white_off(PCA9554 &obj)
     obj.setConfig(PCA9554_CONF_REGISTER, P6_OUTPUT, 1);
 }
 
+void PCA9554::led_ir_on(PCA9554 &obj)
+{
+    obj.setConfig(PCA9554_CONF_REGISTER, P2_OUTPUT, 0);
+}
+
+void PCA9554::led_red_on(PCA9554 &obj)
+{
+    obj.setConfig(PCA9554_CONF_REGISTER, P3_OUTPUT, 0);
+}
+
+void PCA9554::led_green_on(PCA9554 &obj)
+{
+    obj.setConfig(PCA9554_CONF_REGISTER, P4_OUTPUT, 0);
+}
+
 void PCA9554::resetCommandConfig(PCA9554 &obj)
 {
     obj.setConfig(PCA9554_CONF_REGISTER, 255, 1);

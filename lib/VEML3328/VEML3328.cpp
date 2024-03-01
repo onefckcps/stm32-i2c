@@ -1,5 +1,4 @@
 #include "VEML3328.h"
-#include <Arduino.h> // Include the necessary header file
 
 VEML3328::VEML3328()
 {
@@ -48,6 +47,11 @@ uint16_t VEML3328::readBlue()
 uint16_t VEML3328::readGreen()
 {
     return readRGB(0x06);
+}
+
+uint16_t VEML3328::readIr()
+{
+    return readRGB(0x08);
 }
 
 uint16_t VEML3328::readRed()
@@ -115,4 +119,84 @@ bool VEML3328::isBananaYellowTest()
     uint8_t greenBlue = blue / green;
 
     return bananaIsYellow;
+}
+
+VEML3328::RGB VEML3328::calculateAverageRGB(const std::vector<VEML3328::RGB> &rgbValues)
+{
+    RGB averageRGB = {0, 0, 0};
+
+    if (!rgbValues.empty())
+    {
+        unsigned long sumRed = 0;
+        unsigned long sumGreen = 0;
+        unsigned long sumIr = 0;
+
+        for (const auto &rgb : rgbValues)
+        {
+            sumRed += rgb.red;
+            sumGreen += rgb.green;
+            sumIr += rgb.ir;
+        }
+
+        averageRGB.red = sumRed / rgbValues.size();
+        averageRGB.green = sumGreen / rgbValues.size();
+        averageRGB.ir = sumIr / rgbValues.size();
+    }
+
+    return averageRGB;
+}
+
+std::vector<VEML3328::RGB> VEML3328::readRGBFor3Sec()
+{
+    std::vector<RGB> rgbValues;
+
+    unsigned long startTime = millis();
+    while (millis() - startTime < 3000)
+    { // 3000 milliseconds = 3 seconds
+        RGB rgb;
+        rgb.red = readRed();
+        rgb.green = readGreen();
+        rgb.ir = readIr();
+        rgbValues.push_back(rgb);
+
+        delay(100); // Wait for 100 milliseconds before the next reading
+    }
+
+    return rgbValues;
+}
+
+std::string VEML3328::calculateGreenToIR(const RGB &averageRGB)
+{
+    if (averageRGB.green == 0 || averageRGB.ir == 0)
+    {
+        return "Division by zero error";
+    }
+
+    float ratio = static_cast<float>(averageRGB.green) / averageRGB.ir;
+
+    if (ratio < 0.045)
+    {
+        return "grün" + std::to_string(ratio) + "1";
+    }
+    else if (0.045 < ratio && ratio < 0.07)
+    {
+        return "braun" + std::to_string(ratio) + "2";
+    }
+    else if (ratio > 0.07)
+    {
+        return "gelb" + std::to_string(ratio) + "3";
+    }
+    else if (ratio < 0.045 || ratio > 0.07)
+    {
+        return "out of range :/ + std::to_string(ratio)";
+    }
+}
+
+std::string VEML3328::performMeasurement()
+{
+    std::vector<VEML3328::RGB> rgbValues = readRGBFor3Sec();
+    RGB averageRGB = calculateAverageRGB(rgbValues);
+    std::string result = calculateGreenToIR(averageRGB); //+ "," + std::to_string(averageRGB.green) + "," + std::to_string(averageRGB.ir);
+
+    return result;
 }

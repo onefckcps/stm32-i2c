@@ -4,6 +4,8 @@
 
 #include <bitset>
 #include <Wire.h>
+#include <vector>
+#include <Arduino.h> // Include the necessary header file
 
 // Slave address
 #define VEML3328_ADDRESS 0x10
@@ -21,6 +23,13 @@ private:
     uint8_t normalize(uint16_t data);
     bool bananaIsYellow = false;
 
+    struct RGB
+    {
+        uint16_t red;
+        uint16_t green;
+        uint16_t ir;
+    };
+
 public:
     VEML3328();
     // Lets define functions
@@ -28,6 +37,7 @@ public:
     uint16_t readBlue();  // raw count number of blue light
     uint16_t readGreen(); // raw count number of green light
     uint16_t readRed();   // raw count number of red light => convert to lux
+    uint16_t readIr();
 
     // Lets normalize the data
     uint8_t readBlueNormalized();
@@ -37,6 +47,11 @@ public:
     // Lets determine the color of the bannana
     bool isBananaYellow();
     bool isBananaYellowTest();
+
+    std::vector<RGB> readRGBFor3Sec();
+    RGB calculateAverageRGB(const std::vector<RGB> &rgbValues);
+    std::string calculateGreenToIR(const RGB &averageRGB);
+    std::string performMeasurement();
 };
 
 #endif

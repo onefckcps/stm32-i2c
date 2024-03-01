@@ -2,8 +2,9 @@
 #define WIFI_MANAGER_H
 
 #include <WiFi.h>
+#include <ArduinoJson.h>
 // #include <WiFiClient.h>
-// #include <HTTPClient.h> // not needed => conflicting with wifi.h
+#include <HTTPClient.h> // not needed => conflicting with wifi.h
 // #include <ArduinoJson.h>
 
 class WiFiManager
@@ -19,7 +20,7 @@ public:
 
     WiFiManager(char *ssid, char *password);
     void connect();
-    void sendData(Measurement &measurement);
+    void sendData(uint16_t greenData, uint16_t redData, uint16_t blueData, float tempData, float humidityData, const char *id);
 
 private:
     char *ssid;
