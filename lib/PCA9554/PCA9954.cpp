@@ -64,6 +64,7 @@ void PCA9554::led_green_on(PCA9554 &obj)
     obj.setConfig(PCA9554_CONF_REGISTER, P4_OUTPUT, 0);
 }
 
+// bullshit -> dat ding hat doch keinen speicher simon :()
 void PCA9554::resetCommandConfig(PCA9554 &obj)
 {
     obj.setConfig(PCA9554_CONF_REGISTER, 255, 1);

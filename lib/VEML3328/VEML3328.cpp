@@ -82,6 +82,7 @@ uint8_t VEML3328::readRedNormalized()
     return normalize(readRed());
 }
 
+// first tests
 bool VEML3328::isBananaYellow()
 {
     uint8_t red = readRed();
@@ -176,15 +177,15 @@ std::string VEML3328::calculateGreenToIR(const RGB &averageRGB)
 
     if (ratio < 0.045)
     {
-        return "grün" + std::to_string(ratio) + "1";
+        return "grün " + std::to_string(ratio);
     }
     else if (0.045 < ratio && ratio < 0.07)
     {
-        return "braun" + std::to_string(ratio) + "2";
+        return "braun " + std::to_string(ratio);
     }
     else if (ratio > 0.07)
     {
-        return "gelb" + std::to_string(ratio) + "3";
+        return "gelb " + std::to_string(ratio);
     }
     else if (ratio < 0.045 || ratio > 0.07)
     {

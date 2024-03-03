@@ -14,8 +14,8 @@ WiFiManager *wifi;
 
 void setup()
 {
-  char *WIFI_SSID = "Bananuts";
-  char *WIFI_PW = "Cheesburger!";
+  char *WIFI_SSID = "INFECAR_ORGANIZACION";
+  char *WIFI_PW = "23noviembre";
   // const char *AUTH_TOKEN = "0"; // Changed from 'const char' to 'const char*'
 
   Serial.begin(9600); // Start serial communication for debugging
@@ -31,7 +31,7 @@ void setup()
   pca->led_green_on(*pca);
 
   // sleep(5);
-  // wifi = new WiFiManager(WIFI_SSID, WIFI_PW);
+  wifi = new WiFiManager(WIFI_SSID, WIFI_PW);
 
   Serial.println("Setup beendet");
 }
@@ -74,9 +74,13 @@ void loop()
   // Serial.print(",");
   // Serial.println(blueData);
 
-  // wifi->sendData(redData, greenData, blueData, 0, 0, "1");
   std::string result = veml3328->performMeasurement();
-  Serial.println(result.c_str());
+
+  // std::string result = "test";
+
+  // Serial.println(result.c_str());
+  wifi->sendData(result, 0, 0, "1");
+  // wifi->sendData(redData, greenData, blueData, 0, 0, "1");
 
   // bool bannaYellow = veml3328->isBananaYellow();
   // Serial.println(bannaYellow);
