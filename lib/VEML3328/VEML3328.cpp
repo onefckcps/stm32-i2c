@@ -110,18 +110,6 @@ bool VEML3328::isBananaYellow()
     }
 }
 
-bool VEML3328::isBananaYellowTest()
-{
-    uint8_t red = readRed();
-    uint8_t green = readGreen();
-    uint8_t blue = readBlue();
-
-    uint8_t redBlue = blue / red;
-    uint8_t greenBlue = blue / green;
-
-    return bananaIsYellow;
-}
-
 VEML3328::RGB VEML3328::calculateAverageRGB(const std::vector<VEML3328::RGB> &rgbValues)
 {
     RGB averageRGB = {0, 0, 0};

@@ -24,11 +24,11 @@ void setup()
   pca = new PCA9554();
   veml3328 = new VEML3328();
 
-  // active whitle led
-  // pca->led_white_on(*pca);
-  pca->led_ir_on(*pca);
-  pca->led_red_on(*pca);
-  pca->led_green_on(*pca);
+  // activate white led
+  // pca->led_white_on();
+  pca->led_ir_on();
+  pca->led_red_on();
+  pca->led_green_on();
 
   // sleep(5);
   wifi = new WiFiManager(WIFI_SSID, WIFI_PW);

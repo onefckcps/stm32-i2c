@@ -11,25 +11,19 @@
 #define P3_OUTPUT (1 << 3)         // control RED LED
 #define P4_OUTPUT (1 << 4)         // control GREEN LED
 
-// // functions declarations
-// uint8_t getConfig(int configAddr, int i2cAddress, int bytesToRead);
-
-// void setConfig(int addr, int config);
-
-#endif
-
 class PCA9554
 {
-
 public:
     // Default Constructor
     // PCA9554(); // dont need this constructor
     uint8_t getConfig(int configAddr, int i2cAddress, int bytesToRead);
     void setConfig(int addr, int config, int zeroOrOne);
-    void led_white_on(PCA9554 &obj);
-    void led_white_off(PCA9554 &obj);
-    void resetCommandConfig(PCA9554 &obj);
-    void led_ir_on(PCA9554 &obj);
-    void led_red_on(PCA9554 &obj);
-    void led_green_on(PCA9554 &obj);
+    void led_white_on();
+    void led_white_off();
+    void resetCommandConfig();
+    void led_ir_on();
+    void led_red_on();
+    void led_green_on();
 };
+
+#endif
